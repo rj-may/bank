@@ -53,7 +53,7 @@ def main():
         
     player_index = 0
 
-    for i in number_rounds:
+    for i in range(number_rounds):
         print("ROUND " + str(i +1) + "\n \n")
         
         round_obj = round()
@@ -66,8 +66,10 @@ def main():
             current_player = players[player_index]
             
                 
-            if current_player.banked == True:
+            if current_player.get_banked == True:
                 player_index = (player_index +1) % len(players)
+
+                ### TODO build a cyler here to check if everyone is banked
 
                 continue # this skips to the next player
 
@@ -78,36 +80,52 @@ def main():
             while valid_roll == False:
                 if round_obj.get_roll_num() <3:
                     roll = input("What did they roll?")
-                else:
-                    roll = input("Is someone banking?")
-
-                if isinstance(roll, int):
-                    if round_obj.get_roll_num() <3:
+                    if isinstance(roll, int):
                         if 1 < roll<  13:
                             valid_roll = True
-                    else:
+
+                else:
+                    roll = input("What did they roll, or is someone banking?")
+
+                    if isinstance(roll, int):
+       
                         if 2 < roll<  12:
                             valid_roll = True
 
-                elif isinstance(roll, str):
-                    roll = roll.lower()
+                    elif isinstance(roll, str):
+                        roll = roll.lower()
 
-                    possible = ["d", "doubles", "double"]
-                    if roll in possible:
-                        valid_roll = True
+                        possible = ["d", "doubles", "double"]
 
-                else:
-                    print("Please enter a valid value")
+                        banking_list = ["bank", "banking", "b"]
 
-            round_obj.add_score(roll)
+                        if roll in banking_list:
+                            #TODO fix this
+                            print("This is broken")
+                            continue
+
+
+                        if roll in possible:
+                            valid_roll = True
+
+                        
+                            round_obj.add_score(roll)
+
+
+                            if round_obj.get_game_over() == True:
+                                playing = False
+
+                            print("Score is ", round_obj.get_score())
+
+                            player_index = (player_index +1) % len(players) 
+
+
+                    else:
+                        print("Please enter a valid value")
+
 
                 
-            if round_obj.get_game_over() == True:
-                playing = False
 
-            print("Score is ", round_obj.get_score())
-
-            player_index = (player_index +1) % len(players) 
 
 
 
